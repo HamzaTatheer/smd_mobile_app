@@ -1,0 +1,11 @@
+allprojects {
+
+    repositories {
+
+        // requires Gradle v4.1+
+
+        google()
+
+    }
+
+}
