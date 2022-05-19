@@ -3,6 +3,8 @@ package com.example.therapychannel.service.forum;
 import com.example.therapychannel.DAO.forum.DTO.ProblemDTO;
 import com.example.therapychannel.DAO.forum.DTO.ProblemPostDTO;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
 import java.util.ArrayList;
 
 public interface IDAO {

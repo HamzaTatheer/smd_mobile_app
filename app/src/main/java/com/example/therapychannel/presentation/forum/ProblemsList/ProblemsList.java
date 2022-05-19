@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import com.example.therapychannel.DAO.forum.DTO.ProblemDTO;
 import com.example.therapychannel.R;
 import com.example.therapychannel.service.forum.entities.Problem;
+import com.example.therapychannel.service.forum.getProblemsList;
 
 import java.util.ArrayList;
 
@@ -22,10 +23,10 @@ import java.util.ArrayList;
  * Use the {@link ProblemsList#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ProblemsList extends Fragment  implements ProblemsListRvAdapter.onClickListener{
+public class ProblemsList extends Fragment{
 
     public interface Listener{
-        void onProblemSelect(String problem_name);
+        void onProblemSelect(Problem problem);
     };
 
     Listener listener;
@@ -59,6 +60,8 @@ public class ProblemsList extends Fragment  implements ProblemsListRvAdapter.onC
 
         RecyclerView rv = (RecyclerView) view.findViewById(R.id.fragment_problems_rv);
 
+        Log.v("TherapyChannel","Hello");
+
         if(rv == null){
             Log.e("TherapyChannel","rv is null");
         }
@@ -70,25 +73,31 @@ public class ProblemsList extends Fragment  implements ProblemsListRvAdapter.onC
 
         rv.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        dataset = new ArrayList<>();
-        dataset.add(new Problem("weight",10));
-        dataset.add(new Problem("weight",201));
-        dataset.add(new Problem("weight",400));
-        dataset.add(new Problem("weight",20));
 
-        ProblemsListRvAdapter adapter = new ProblemsListRvAdapter(getContext(),dataset,this);
-        rv.setAdapter(adapter);
+        Thread t = new Thread(new getProblemsList(new getProblemsList.Listener() {
+            @Override
+            public void onSuccess(ArrayList<Problem> response) {
+                dataset = response;
+                ProblemsListRvAdapter adapter = new ProblemsListRvAdapter(getContext(), dataset, new ProblemsListRvAdapter.onClickListener() {
+
+                    @Override
+                    public void onClick(int position) {
+                        Problem p = dataset.get(position);
+                        if(listener != null)
+                            listener.onProblemSelect(p);
+                    }
+
+                });
+                rv.setAdapter(adapter);
+
+            }
+        }));
+
+        t.start();
 
         return view;
     }
 
-    @Override
-    public void onClick(int position) {
-        Log.v("TherapyChannel","Clicked");
-        Problem p = dataset.get(position);
-        if(listener != null)
-            listener.onProblemSelect(p.getName());
-    }
 
 }
 
