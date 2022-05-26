@@ -32,6 +32,10 @@ public class ProblemsList extends Fragment{
     Listener listener;
     ArrayList<Problem> dataset;
 
+    public ProblemsList(){
+
+    }
+
     public ProblemsList(Listener listener) {
         // Required empty public constructor
         this.listener = listener;

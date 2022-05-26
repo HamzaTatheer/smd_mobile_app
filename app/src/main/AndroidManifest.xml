@@ -3,6 +3,7 @@
     package="com.example.therapychannel">
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -14,7 +15,8 @@
 
         <activity
             android:name=".presentation.MainActivity"
-            android:configChanges="screenSize|keyboardHidden"
+            android:configChanges="orientation|screenSize"
+            android:screenOrientation="portrait"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -22,6 +24,16 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <service
+            android:name=".service.forum.MusicService.MusicPlayerService"
+            android:exported="true" />
+        <receiver android:name=".service.forum.MusicService.MusicPlayerServiceBroadcastReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="STOP_MUSIC" />
+            </intent-filter>
+        </receiver>
 
     </application>
 
