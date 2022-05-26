@@ -1,6 +1,7 @@
 package com.example.therapychannel.presentation;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -13,6 +14,8 @@ import com.example.therapychannel.R;
 import com.example.therapychannel.presentation.forum.MainHeader;
 import com.example.therapychannel.presentation.forum.ProblemPostsList.ProblemPostsList;
 import com.example.therapychannel.presentation.forum.ProblemsList.ProblemsList;
+import com.example.therapychannel.presentation.forum.WifiErrorScreen.WifiError;
+import com.example.therapychannel.presentation.forum.common.InternetStatus;
 import com.example.therapychannel.service.forum.IDAO;
 import com.example.therapychannel.service.forum.entities.Problem;
 
@@ -50,24 +53,39 @@ public class MainActivity extends AppCompatActivity {
                 .commit();
 
     }
+    InternetStatus internetStatus;
+    void displayProblemList() {
+        Log.v("TherapyChannel", "Hello World");
 
-    void displayProblemList(){
-        Fragment problemListFragment = ProblemsList.newInstance(new ProblemsList.Listener() {
-            @Override
-            public void onProblemSelect(Problem problem) {
+        if (InternetStatus.isOnline(this)) {
 
-                Log.v("TherapyChannel","fragment start");
+            Log.v("TherapyChannel", "Internet not working");
+            Fragment problemListFragment = ProblemsList.newInstance(new ProblemsList.Listener() {
+                @Override
+                public void onProblemSelect(Problem problem) {
 
-                headerFragment.enableBackButton();
-                getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.fragment_main_body, ProblemPostsList.newInstance(problem),null)
-                        .commit();
-            }
-        });
+                    Log.v("TherapyChannel", "fragment start");
 
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragment_main_body,problemListFragment,null)
-                .commit();
+                    headerFragment.enableBackButton();
+                    getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.fragment_main_body, ProblemPostsList.newInstance(problem), null)
+                            .commit();
+                }
+            });
+
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_main_body, problemListFragment, null)
+                    .commit();
+
+        } else {
+            Log.v("TherapyChannel", "Internet working");
+            Fragment error_fragment = new WifiError();
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_main_body, error_fragment, null).commit();
+        }
     }
+
+
+
+
 
 }

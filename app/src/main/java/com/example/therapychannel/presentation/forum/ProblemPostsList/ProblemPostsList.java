@@ -16,8 +16,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.therapychannel.R;
+import com.example.therapychannel.presentation.forum.common.InternetStatus;
 import com.example.therapychannel.service.forum.createPostForProblem;
 import com.example.therapychannel.service.forum.entities.Problem;
 import com.example.therapychannel.service.forum.entities.ProblemPost;
@@ -120,7 +122,16 @@ public class ProblemPostsList extends Fragment {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                refreshPosts();
+                if(InternetStatus.isOnline(getContext()))
+                    refreshPosts();
+                else{
+                    Toast toast = Toast.makeText(getContext(),
+                            "Make sure your internet is working",
+                            Toast.LENGTH_SHORT);
+                    toast.show();
+                    swipeRefreshLayout.setRefreshing(false);
+                }
+
             }
         });
 

@@ -24,7 +24,7 @@ import java.util.ArrayList;
 
 public class WebDao implements IDAO {
 
-    private static final String api_url = "https://evil-days-post-39-46-76-190.loca.lt";
+    private static final String api_url = "https://fast-cobras-repair-39-46-76-190.loca.lt";
 
     private JSONArray parse(String str){
         JSONArray array = null;
